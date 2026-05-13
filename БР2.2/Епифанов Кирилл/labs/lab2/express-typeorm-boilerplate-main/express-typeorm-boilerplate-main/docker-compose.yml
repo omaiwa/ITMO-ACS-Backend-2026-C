@@ -1,0 +1,139 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: dev
+    volumes:
+      - lab2_pg:/var/lib/postgresql/data
+      - ./docker/init-databases.sql:/docker-entrypoint-initdb.d/01-databases.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d dev"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    networks:
+      - backend
+
+  user:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/services/user-service/src/index.js"]
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: userdb
+      DB_USER: dev
+      DB_PASSWORD: dev
+      INTERNAL_SERVICE_TOKEN: lab-internal
+      JWT_SECRET_KEY: secret
+      APP_PORT: "8002"
+      APP_HOST: "0.0.0.0"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  auth:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/services/auth-service/src/index.js"]
+    environment:
+      USER_SERVICE_URL: http://user:8002
+      INTERNAL_SERVICE_TOKEN: lab-internal
+      JWT_SECRET_KEY: secret
+      APP_PORT: "8001"
+      APP_HOST: "0.0.0.0"
+    depends_on:
+      - user
+    networks:
+      - backend
+
+  property:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/services/property-service/src/index.js"]
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: propertydb
+      DB_USER: dev
+      DB_PASSWORD: dev
+      INTERNAL_SERVICE_TOKEN: lab-internal
+      JWT_SECRET_KEY: secret
+      APP_PORT: "8003"
+      APP_HOST: "0.0.0.0"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  booking:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/services/booking-service/src/index.js"]
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: bookingdb
+      DB_USER: dev
+      DB_PASSWORD: dev
+      JWT_SECRET_KEY: secret
+      APP_PORT: "8004"
+      APP_HOST: "0.0.0.0"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  messaging:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/services/messsaging-service/src/index.js"]
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: messagingdb
+      DB_USER: dev
+      DB_PASSWORD: dev
+      PROPERTY_SERVICE_URL: http://property:8003
+      INTERNAL_SERVICE_TOKEN: lab-internal
+      JWT_SECRET_KEY: secret
+      APP_PORT: "8005"
+      APP_HOST: "0.0.0.0"
+    depends_on:
+      - db
+      - property
+    networks:
+      - backend
+
+  gateway:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/gateway/index.js"]
+    environment:
+      GATEWAY_PORT: "8000"
+      GATEWAY_HOST: "0.0.0.0"
+      AUTH_SERVICE_URL: http://auth:8001
+      USER_SERVICE_URL: http://user:8002
+      PROPERTY_SERVICE_URL: http://property:8003
+      BOOKING_SERVICE_URL: http://booking:8004
+      MESSAGING_SERVICE_URL: http://messaging:8005
+    depends_on:
+      - auth
+      - user
+      - property
+      - booking
+      - messaging
+    ports:
+      - "8080:8000"
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  lab2_pg:
