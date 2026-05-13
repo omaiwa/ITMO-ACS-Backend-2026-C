@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Chat } from '../../../messsaging-service/src/models/chat.entity';
 import { PropertyFacility } from './property-facility.entity';
-import { Chat } from './chat.entity';
 
 
 
@@ -21,16 +21,16 @@ export class Property extends BaseEntity {
     @Column({ type: 'varchar', length: 200, nullable: false })
     propertyDescription!: string;
 
-    @Column({type: 'float', nullable: false })  
+    @Column({ type: 'float', nullable: false })
     propertyPrice!: number;
 
     @Column({ type: 'varchar', length: 200, nullable: false })
     propertyStatus!: string;
 
-    @Column({type: 'float', nullable: false })
+    @Column({ type: 'float', nullable: false })
     propertyOwnerId!: number;
 
-    @Column({type: 'float', nullable: false })
+    @Column({ type: 'float', nullable: false })
     propertyCityId!: number;
 
     @OneToMany(() => PropertyFacility, pf => pf.property, { cascade: true, eager: true })

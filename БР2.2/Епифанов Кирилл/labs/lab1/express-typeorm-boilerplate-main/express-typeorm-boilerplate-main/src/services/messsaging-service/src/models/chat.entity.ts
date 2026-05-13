@@ -1,6 +1,6 @@
 import { Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Property } from '../../../property-service/src/models/property.entity';
 import { Message } from './message.entity';
-import { Property } from './property.entity';
 
 @Entity()
 export class Chat {

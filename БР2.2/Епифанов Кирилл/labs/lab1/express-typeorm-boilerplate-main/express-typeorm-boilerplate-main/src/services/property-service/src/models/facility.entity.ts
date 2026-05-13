@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 't
 import { PropertyFacility } from './property-facility.entity';
 
 @Entity()
-export class Facility extends BaseEntity{
+export class Facility extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 

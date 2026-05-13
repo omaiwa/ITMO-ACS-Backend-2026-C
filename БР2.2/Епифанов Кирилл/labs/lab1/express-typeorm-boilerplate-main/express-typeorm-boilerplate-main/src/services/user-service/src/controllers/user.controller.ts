@@ -1,23 +1,22 @@
 import {
-    Param,
     Body,
     Get,
-    Post,
+    Param,
     Patch,
-    UseBefore,
+    Post,
     Req,
-    Res,
+    UseBefore
 } from 'routing-controllers';
 import { ObjectLiteral } from 'typeorm';
 
-import EntityController from '../common/entity-controller';
-import BaseController from '../common/base-controller';
+import BaseController from '../../../../common/base-controller';
+import EntityController from '../../../../common/entity-controller';
 
 import { User } from '../models/user.entity';
 
 import authMiddleware, {
     RequestWithUser,
-} from '../middlewares/auth.middleware';
+} from '../../../auth-service/src/middlewares/auth.middleware';
 
 @EntityController({
     baseRoute: '/users',
@@ -52,7 +51,7 @@ class UserController extends BaseController {
         const results = await this.repository.findOneBy({ id });
 
         if (!results) {
-            throw new Error('User not found'); 
+            throw new Error('User not found');
         }
 
         return results;
@@ -66,14 +65,14 @@ class UserController extends BaseController {
     ): Promise<ObjectLiteral> {
 
         const userForUpdate = await this.repository.findOneBy({ id });
-            
+
         if (!userForUpdate) {
-            throw new Error('User not found'); 
+            throw new Error('User not found');
         }
 
         Object.assign(userForUpdate, user);
         const results = await this.repository.save(userForUpdate);
-        
+
         return results;
     }
 }

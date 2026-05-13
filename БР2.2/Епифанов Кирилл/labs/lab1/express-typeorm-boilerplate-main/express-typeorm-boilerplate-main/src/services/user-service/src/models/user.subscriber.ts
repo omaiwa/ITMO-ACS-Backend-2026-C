@@ -1,13 +1,13 @@
 import {
-    EventSubscriber,
     EntitySubscriberInterface,
-    UpdateEvent,
+    EventSubscriber,
     InsertEvent,
+    UpdateEvent,
 } from 'typeorm';
 import { User } from './user.entity';
 
-import hashPassword from '../utils/hash-password';
-import checkPassword from '../utils/check-password';
+import checkPassword from '../../../../utils/check-password';
+import hashPassword from '../../../../utils/hash-password';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {

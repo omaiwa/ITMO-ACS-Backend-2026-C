@@ -1,5 +1,5 @@
+import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
 
 import SETTINGS from '../config/settings';
 

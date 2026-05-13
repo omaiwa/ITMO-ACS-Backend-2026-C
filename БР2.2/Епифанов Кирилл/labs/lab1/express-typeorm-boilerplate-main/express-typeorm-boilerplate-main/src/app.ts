@@ -7,12 +7,12 @@ import { useExpressServer } from 'routing-controllers';
 import dataSource from './config/data-source';
 import SETTINGS from './config/settings';
 import AuthController from './controllers/auth.controller';
-import BookingController from './controllers/booking.controller';
-import ChatController from './controllers/chat.controller';
 import CityController from './controllers/city.controller';
-import FacilityController from './controllers/facility.controller';
-import PropertyController from './controllers/property.controller';
 import UserController from './controllers/user.controller';
+import BookingController from './services/booking-service/src/controllers/booking.controller';
+import ChatController from './services/messsaging-service/src/controllers/chat.controller';
+import FacilityController from './services/property-service/src/controllers/facility.controller';
+import PropertyController from './services/property-service/src/controllers/property.controller';
 import { useSwagger } from './swagger';
 
 

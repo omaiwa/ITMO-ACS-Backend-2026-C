@@ -4,8 +4,8 @@ import {
     Post,
 } from 'routing-controllers';
 
-import EntityController from '../common/entity-controller';
-import BaseController from '../common/base-controller';
+import BaseController from '../../../../common/base-controller';
+import EntityController from '../../../../common/entity-controller';
 
 import { City } from '../models/city.entity';
 

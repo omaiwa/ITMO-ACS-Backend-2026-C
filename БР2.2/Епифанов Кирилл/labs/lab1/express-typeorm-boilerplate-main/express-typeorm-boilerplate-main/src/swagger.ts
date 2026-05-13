@@ -1,4 +1,5 @@
 import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import { Express } from 'express';
 import {
     getMetadataArgsStorage,
@@ -6,7 +7,6 @@ import {
 } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import * as swaggerUi from 'swagger-ui-express';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 
 export function useSwagger(
     app: Express,

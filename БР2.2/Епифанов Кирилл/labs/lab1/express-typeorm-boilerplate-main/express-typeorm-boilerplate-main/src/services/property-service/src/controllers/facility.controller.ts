@@ -9,8 +9,8 @@ import {
 
 import { ObjectLiteral } from 'typeorm';
 
-import BaseController from '../common/base-controller';
-import EntityController from '../common/entity-controller';
+import BaseController from '../../../../common/base-controller';
+import EntityController from '../../../../common/entity-controller';
 
 import { Facility } from '../models/facility.entity';
 
@@ -36,7 +36,7 @@ class FacilityController extends BaseController {
         const results = await this.repository.findOneBy({ id });
 
         if (!results) {
-            throw new Error('Facility not found'); 
+            throw new Error('Facility not found');
         }
 
         return results;
@@ -48,14 +48,14 @@ class FacilityController extends BaseController {
         @Body() facility: Partial<Facility>,
     ): Promise<ObjectLiteral> {
         const facilityForUpdate = await this.repository.findOneBy({ id });
-            
+
         if (!facilityForUpdate) {
-            throw new Error('Facility not found'); 
+            throw new Error('Facility not found');
         }
 
         Object.assign(facilityForUpdate, facility);
         const results = await this.repository.save(facilityForUpdate);
-        
+
         return results;
     }
 

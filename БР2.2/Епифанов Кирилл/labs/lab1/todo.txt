@@ -1,0 +1,15 @@
+[x] import all paths from swagger
+    [x] property
+    [x] booking
+    [x] city
+    [x] user
+    [x] auth
+    [x] chats
+    [x] messages
+    [x] facilities
+        [x] associative object from facilities
+        [x] need facilities model and controller
+        [x] create facility in controller, link to property
+[x] check structure
+[x] check functionality in postman
+[x] assess completed work

@@ -8,9 +8,9 @@ import {
 } from 'routing-controllers';
 
 import { ObjectLiteral } from 'typeorm';
-import BaseController from '../common/base-controller';
-import EntityController from '../common/entity-controller';
-import dataSource from '../config/data-source';
+import BaseController from '../../../../common/base-controller';
+import EntityController from '../../../../common/entity-controller';
+import dataSource from '../../../../config/data-source';
 import { Facility } from '../models/facility.entity';
 import { PropertyFacility } from '../models/property-facility.entity';
 import { Property } from '../models/property.entity';

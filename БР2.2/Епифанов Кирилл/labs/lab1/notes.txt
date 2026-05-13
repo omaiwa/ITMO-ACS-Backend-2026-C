@@ -1,0 +1,2 @@
+boiler used for fast init - hashing, auth is done here -> develop for use case
+

@@ -9,8 +9,8 @@ import {
 
 import { ObjectLiteral } from 'typeorm';
 
-import BaseController from '../common/base-controller';
-import EntityController from '../common/entity-controller';
+import BaseController from '../../../../common/base-controller';
+import EntityController from '../../../../common/entity-controller';
 
 import { Booking } from '../models/booking.entity';
 
@@ -38,7 +38,7 @@ class BookingController extends BaseController {
         const results = await this.repository.findOneBy({ id });
 
         if (!results) {
-            throw new Error('Booking not found'); 
+            throw new Error('Booking not found');
         }
 
         return results;
@@ -48,16 +48,16 @@ class BookingController extends BaseController {
     async update(
         @Param('id') id: number,
         @Body() booking: Partial<Booking>,
-    ): Promise<ObjectLiteral> {    
+    ): Promise<ObjectLiteral> {
         const bookingForUpdate = await this.repository.findOneBy({ id });
-            
+
         if (!bookingForUpdate) {
-            throw new Error('Booking not found'); 
+            throw new Error('Booking not found');
         }
 
         Object.assign(bookingForUpdate, booking);
         const results = await this.repository.save(bookingForUpdate);
-        
+
         return results;
     }
 

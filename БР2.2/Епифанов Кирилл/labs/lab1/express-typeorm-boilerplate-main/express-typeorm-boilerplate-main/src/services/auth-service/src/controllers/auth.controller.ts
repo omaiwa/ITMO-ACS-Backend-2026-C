@@ -6,12 +6,12 @@ import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi';
 
 import SETTINGS from '../config/settings';
 
-import BaseController from '../common/base-controller';
-import EntityController from '../common/entity-controller';
+import BaseController from '../../../../common/base-controller';
+import EntityController from '../../../../common/entity-controller';
 
-import { User } from '../models/user.entity';
+import { User } from '../../../user-service/src/models/user.entity';
 
-import checkPassword from '../utils/check-password';
+import checkPassword from '../../../../utils/check-password';
 
 class LoginDto {
     @IsEmail()
