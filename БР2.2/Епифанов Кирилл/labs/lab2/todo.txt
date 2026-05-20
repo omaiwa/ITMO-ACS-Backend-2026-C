@@ -9,7 +9,6 @@
 [x] Разработка стратегии межсервисного взаимодействия
     [x] Синхронная связь REST
     [x] Распространение аутентификации JWT
-
 [x] Настройка независимого источника данных TypeORM для каждого микросервиса
 [x] Создание отдельных переменных среды для каждого сервиса
 [x] Обновление файла docker-compose.yml для нескольких сервисов и баз данных
@@ -24,3 +23,10 @@
 [] Проверить и подтвердить архитектурный проект
 [] Подготовить окончательные диаграммы и документацию для отправки
 
+[x] scale up view index
+[x] seperate package.json for each service (npm workspaces)
+[x] turborepo - npm run dev launches all services
+[x] microservices should each launch on different container (docker/Dockerfile.service per service)
+[x] fix gateways (nginx path order, full URI proxy)
+[x] use nginx - express gateway optional via dev:gateway
+[] fastify? control code piece - 3x more load - golang

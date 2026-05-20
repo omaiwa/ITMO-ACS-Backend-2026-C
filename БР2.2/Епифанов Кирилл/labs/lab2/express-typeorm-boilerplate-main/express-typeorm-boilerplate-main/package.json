@@ -1,17 +1,24 @@
 {
-  "name": "express-typeorm-boilerplate",
+  "name": "@rental/root",
   "version": "1.0.0",
-  "description": "A complex production-ready boilerplate based on express and typeorm",
-  "main": "index.js",
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "packages/common",
+    "src/services/auth-service",
+    "src/services/user-service",
+    "src/services/property-service",
+    "src/services/booking-service",
+    "src/services/messsaging-service"
+  ],
   "scripts": {
-    "build": "npx tsc",
-    "prestart": "npm run build",
-    "start": "node dist/gateway/index.js",
-    "dev": "npx tsx --env-file=.env --watch src/gateway/index.ts",
+    "build": "tsc",
+    "dev:db": "docker compose up db -d",
+    "dev": "turbo run dev",
+    "dev:gateway": "npx tsx --env-file=.env --watch src/gateway/index.ts",
+    "start": "docker compose up --build",
     "format": "prettier --write \"src/**/*.ts\""
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
@@ -19,7 +26,6 @@
     "class-validator-jsonschema": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "http-proxy-middleware": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.14.0",
     "reflect-metadata": "^0.2.2",
@@ -34,11 +40,13 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.19.15",
-    "@types/send": "^1.2.1",
-    "@types/serve-static": "^2.2.0",
     "@types/swagger-ui-express": "^4.1.8",
     "prettier": "^3.5.3",
     "tsx": "^4.19.3",
+    "turbo": "^2.5.4",
     "typescript": "^5.8.2"
+  },
+  "optionalDependencies": {
+    "http-proxy-middleware": "^3.0.3"
   }
 }

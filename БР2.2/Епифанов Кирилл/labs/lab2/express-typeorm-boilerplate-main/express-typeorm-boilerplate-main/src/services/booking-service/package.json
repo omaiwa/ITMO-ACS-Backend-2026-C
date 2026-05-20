@@ -1,0 +1,20 @@
+{
+  "name": "@rental/booking-service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch --env-file=../../../.env src/index.ts",
+    "start": "node ../../../dist/services/booking-service/src/index.js"
+  },
+  "dependencies": {
+    "@rental/common": "*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "pg": "^8.14.0",
+    "reflect-metadata": "^0.2.2",
+    "routing-controllers": "0.11.0",
+    "typeorm": "^0.3.21"
+  }
+}

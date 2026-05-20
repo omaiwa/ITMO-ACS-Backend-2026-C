@@ -9,7 +9,7 @@ import {
 import { ObjectLiteral } from 'typeorm';
 import BaseController from '../../../../common/base-controller';
 import EntityController from '../../../../common/entity-controller';
-import dataSource from '../config/data-source';
+import dataSource from '../../../../config/data-source';
 import { Property } from '../../../property-service/src/models/property.entity';
 import { Chat } from '../models/chat.entity';
 import { Message } from '../models/message.entity';

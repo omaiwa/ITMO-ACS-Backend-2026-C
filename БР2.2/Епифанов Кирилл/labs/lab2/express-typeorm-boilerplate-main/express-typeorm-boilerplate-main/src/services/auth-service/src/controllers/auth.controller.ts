@@ -55,22 +55,29 @@ function internalHeaders(): Record<string, string> {
 class AuthController {
     @Post('/register')
     async register(@Body() data: RegisterDto) {
-        const res = await fetch(`${userBase()}/users`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        const text = await res.text();
-        let body: unknown;
         try {
-            body = JSON.parse(text);
-        } catch {
-            body = { message: text };
-        }
-        if (!res.ok) {
+            const res = await fetch(`${userBase()}/users`, {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+            const text = await res.text();
+            let body: unknown;
+            try {
+                body = JSON.parse(text);
+            } catch {
+                body = { message: text };
+            }
+            if (!res.ok) {
+                return body;
+            }
             return body;
+        } catch {
+            return {
+                message:
+                    'User service unreachable. Ensure user and db containers are running.',
+            };
         }
-        return body;
     }
 
     @Post('/login')
@@ -81,23 +88,37 @@ class AuthController {
         @Body({ type: LoginDto }) loginData: LoginDto,
     ): Promise<LoginResponseDto | ErrorResponseDto> {
         const { email, password } = loginData;
-        const res = await fetch(
-            `${userBase()}/internal/users/by-email?email=${encodeURIComponent(
-                email,
-            )}`,
-            { headers: internalHeaders() },
-        );
+        let res: globalThis.Response;
+        try {
+            res = await fetch(
+                `${userBase()}/internal/users/by-email?email=${encodeURIComponent(
+                    email,
+                )}`,
+                { headers: internalHeaders() },
+            );
+        } catch {
+            return { message: 'User service unreachable' };
+        }
         if (res.status === 404) {
             return { message: 'User is not found' };
         }
         if (!res.ok) {
             return { message: 'User lookup failed' };
         }
-        const user = (await res.json()) as {
+        let user: {
             id: number;
             email: string;
             password: string;
         };
+        try {
+            user = (await res.json()) as {
+                id: number;
+                email: string;
+                password: string;
+            };
+        } catch {
+            return { message: 'User lookup failed' };
+        }
         const isPasswordCorrect = checkPassword(user.password, password);
         if (!isPasswordCorrect) {
             return { message: 'Password or email is incorrect' };

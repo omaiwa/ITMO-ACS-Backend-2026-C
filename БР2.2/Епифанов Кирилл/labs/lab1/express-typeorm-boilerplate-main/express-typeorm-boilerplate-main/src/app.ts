@@ -6,9 +6,9 @@ import { useExpressServer } from 'routing-controllers';
 
 import dataSource from './config/data-source';
 import SETTINGS from './config/settings';
-import AuthController from './controllers/auth.controller';
-import CityController from './controllers/city.controller';
-import UserController from './controllers/user.controller';
+import AuthController from './services/auth-service/src/controllers/auth.controller';
+import CityController from './services/property-service/src/controllers/city.controller';
+import UserController from './services/user-service/src/controllers/user.controller';
 import BookingController from './services/booking-service/src/controllers/booking.controller';
 import ChatController from './services/messsaging-service/src/controllers/chat.controller';
 import FacilityController from './services/property-service/src/controllers/facility.controller';

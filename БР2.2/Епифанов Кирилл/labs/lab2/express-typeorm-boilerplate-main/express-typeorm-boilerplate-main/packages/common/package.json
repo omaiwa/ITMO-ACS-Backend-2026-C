@@ -1,0 +1,11 @@
+{
+  "name": "@rental/common",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.2",
+    "routing-controllers": "0.11.0",
+    "typeorm": "^0.3.21"
+  }
+}

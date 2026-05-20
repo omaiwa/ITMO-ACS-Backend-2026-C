@@ -16,7 +16,7 @@ import { User } from '../models/user.entity';
 
 import authMiddleware, {
     RequestWithUser,
-} from '../../../auth-service/src/middlewares/auth.middleware';
+} from '../../../../common/auth.middleware';
 
 @EntityController({
     baseRoute: '/users',
