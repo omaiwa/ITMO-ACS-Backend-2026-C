@@ -31,5 +31,5 @@
 [x] use nginx - express gateway optional via dev:gateway
 [] fastify? control code piece - 3x more load - golang
 
-docker.compose yml #sensitive info in .env
-research npm ci and npm install
+[x] lab4 complete
+[x] homework6 complete
