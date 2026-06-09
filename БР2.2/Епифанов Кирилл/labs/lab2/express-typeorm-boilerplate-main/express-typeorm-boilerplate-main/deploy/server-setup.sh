@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Initial VPS setup for Lab 4 — Ubuntu 22.04/24.04 LTS
-# Run as root or with sudo: bash deploy/server-setup.sh
 
 set -euo pipefail
 

@@ -1,5 +1,5 @@
-# Dev: docker compose up --build
-# Prod: docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d --build
+# Dev:  docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+# Prod: docker compose --env-file .env up -d --build
 
 services:
   db:
@@ -11,8 +11,6 @@ services:
     volumes:
       - lab2_pg:/var/lib/postgresql/data
       - ./docker/init-databases.sql:/docker-entrypoint-initdb.d/01-databases.sql
-    ports:
-      - "15432:5432"
     healthcheck:
       test:
         [
@@ -29,9 +27,6 @@ services:
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
     restart: unless-stopped
-    ports:
-      - "5672:5672"
-      - "15672:15672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 5s
@@ -222,7 +217,7 @@ services:
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     depends_on:
       auth:
         condition: service_healthy

@@ -1,13 +1,1 @@
-# Production override — use with:
-# docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d --build
-
-services:
-  db:
-    ports: []
-
-  rabbitmq:
-    ports: []
-
-  gateway:
-    ports:
-      - "127.0.0.1:8080:80"
+services: {}

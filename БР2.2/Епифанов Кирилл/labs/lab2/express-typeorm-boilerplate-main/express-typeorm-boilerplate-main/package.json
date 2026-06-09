@@ -13,11 +13,11 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev:db": "docker compose up db rabbitmq -d",
+    "dev:db": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up db rabbitmq -d",
     "dev": "turbo run dev",
     "dev:gateway": "npx tsx --env-file=.env --watch src/gateway/index.ts",
-    "start": "docker compose up --build",
-    "start:prod": "docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d --build",
+    "start": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
+    "start:prod": "docker compose --env-file .env up -d --build",
     "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
