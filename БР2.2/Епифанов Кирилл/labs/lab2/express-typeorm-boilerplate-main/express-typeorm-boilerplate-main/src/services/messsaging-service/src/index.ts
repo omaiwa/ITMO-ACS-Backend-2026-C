@@ -4,6 +4,7 @@ import express from 'express';
 import { useExpressServer } from 'routing-controllers';
 
 import { setDataSource } from '../../../common/data-source-context';
+import { startMessagingConsumers } from './consumers/events.consumer';
 import HealthController from '../../../common/health.controller';
 import dataSource from './config/data-source';
 import SETTINGS from './config/settings';
@@ -25,6 +26,7 @@ async function main() {
     app.listen(SETTINGS.APP_PORT, SETTINGS.APP_HOST, () => {
         console.log(`messaging ${SETTINGS.APP_PORT}`);
     });
+    startMessagingConsumers();
 }
 
 main().catch((e) => {

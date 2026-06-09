@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { useExpressServer } from 'routing-controllers';
 
+import { connectPublisher } from '../../../common/rabbitmq/client';
 import { setDataSource } from '../../../common/data-source-context';
 import HealthController from '../../../common/health.controller';
 import dataSource from './config/data-source';
@@ -12,6 +13,7 @@ import BookingController from './controllers/booking.controller';
 async function main() {
     await dataSource.initialize();
     setDataSource(dataSource);
+    connectPublisher().catch((e) => console.error('[booking] rabbitmq', e));
     const app = express();
     app.use(cors());
     app.use(express.json());

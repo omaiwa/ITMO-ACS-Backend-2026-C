@@ -1,21 +1,43 @@
+# Dev: docker compose up --build
+# Prod: docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env up -d --build
+
 services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
-      POSTGRES_DB: dev
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev}
+      POSTGRES_DB: ${POSTGRES_DB:-dev}
     volumes:
       - lab2_pg:/var/lib/postgresql/data
       - ./docker/init-databases.sql:/docker-entrypoint-initdb.d/01-databases.sql
     ports:
       - "15432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev -d dev"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-dev} -d ${POSTGRES_DB:-dev}",
+        ]
       interval: 3s
       timeout: 5s
       retries: 20
       start_period: 60s
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 15
+      start_period: 30s
     networks:
       - backend
 
@@ -30,14 +52,17 @@ services:
       DB_HOST: db
       DB_PORT: "5432"
       DB_NAME: userdb
-      DB_USER: dev
-      DB_PASSWORD: dev
-      INTERNAL_SERVICE_TOKEN: lab-internal
-      JWT_SECRET_KEY: secret
+      DB_USER: ${POSTGRES_USER:-dev}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-dev}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-lab-internal}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-secret}
       APP_PORT: "8002"
       APP_HOST: "0.0.0.0"
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       db:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     healthcheck:
       test:
@@ -61,8 +86,8 @@ services:
     restart: unless-stopped
     environment:
       USER_SERVICE_URL: http://user:8002
-      INTERNAL_SERVICE_TOKEN: lab-internal
-      JWT_SECRET_KEY: secret
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-lab-internal}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-secret}
       APP_PORT: "8001"
       APP_HOST: "0.0.0.0"
     depends_on:
@@ -92,14 +117,17 @@ services:
       DB_HOST: db
       DB_PORT: "5432"
       DB_NAME: propertydb
-      DB_USER: dev
-      DB_PASSWORD: dev
-      INTERNAL_SERVICE_TOKEN: lab-internal
-      JWT_SECRET_KEY: secret
+      DB_USER: ${POSTGRES_USER:-dev}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-dev}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-lab-internal}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-secret}
       APP_PORT: "8003"
       APP_HOST: "0.0.0.0"
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       db:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     healthcheck:
       test:
@@ -125,13 +153,16 @@ services:
       DB_HOST: db
       DB_PORT: "5432"
       DB_NAME: bookingdb
-      DB_USER: dev
-      DB_PASSWORD: dev
-      JWT_SECRET_KEY: secret
+      DB_USER: ${POSTGRES_USER:-dev}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-dev}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-secret}
       APP_PORT: "8004"
       APP_HOST: "0.0.0.0"
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       db:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     healthcheck:
       test:
@@ -157,18 +188,21 @@ services:
       DB_HOST: db
       DB_PORT: "5432"
       DB_NAME: messagingdb
-      DB_USER: dev
-      DB_PASSWORD: dev
+      DB_USER: ${POSTGRES_USER:-dev}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-dev}
       PROPERTY_SERVICE_URL: http://property:8003
-      INTERNAL_SERVICE_TOKEN: lab-internal
-      JWT_SECRET_KEY: secret
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-lab-internal}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-secret}
       APP_PORT: "8005"
       APP_HOST: "0.0.0.0"
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://guest:guest@rabbitmq:5672}
     depends_on:
       db:
         condition: service_healthy
-      property:
+      rabbitmq:
         condition: service_healthy
+      property:
+        condition: service_started
     healthcheck:
       test:
         [
@@ -195,11 +229,11 @@ services:
       user:
         condition: service_healthy
       property:
-        condition: service_healthy
+        condition: service_started
       booking:
-        condition: service_healthy
+        condition: service_started
       messaging:
-        condition: service_healthy
+        condition: service_started
     networks:
       - backend
 

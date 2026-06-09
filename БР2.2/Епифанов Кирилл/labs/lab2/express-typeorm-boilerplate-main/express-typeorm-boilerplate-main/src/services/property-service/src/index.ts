@@ -4,6 +4,7 @@ import express from 'express';
 import { useExpressServer } from 'routing-controllers';
 
 import { setDataSource } from '../../../common/data-source-context';
+import { startPropertyBookingConsumer } from './consumers/booking.consumer';
 import HealthController from '../../../common/health.controller';
 import dataSource from './config/data-source';
 import SETTINGS from './config/settings';
@@ -34,6 +35,7 @@ async function main() {
     app.listen(SETTINGS.APP_PORT, SETTINGS.APP_HOST, () => {
         console.log(`property ${SETTINGS.APP_PORT}`);
     });
+    startPropertyBookingConsumer();
 }
 
 main().catch((e) => {
