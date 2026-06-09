@@ -1,0 +1,31 @@
+name: Deploy to Yandex Cloud
+
+on:
+  push:
+    branches: [lab4]
+    paths:
+      - 'БР2.2/Епифанов Кирилл/labs/lab2/express-typeorm-boilerplate-main/express-typeorm-boilerplate-main/**'
+      - '.github/workflows/deploy.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
+          command_timeout: 25m
+          script: |
+            set -e
+            cd /opt/rental-api
+            git fetch origin lab4
+            git reset --hard origin/lab4
+            cd "БР2.2/Епифанов Кирилл/labs/lab2/express-typeorm-boilerplate-main/express-typeorm-boilerplate-main"
+            docker compose --env-file .env up -d --build
+            curl -fsS http://127.0.0.1:8080/health
